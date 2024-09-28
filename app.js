@@ -6,7 +6,7 @@ const cors = require('cors');
 const multer = require('multer');
 const path = require("path");
 const cron = require('node-cron');
-const axios = require('axios'); 
+const axios = require('axios'); // For making HTTP requests
 const app = express();
 
 const DBurl = process.env.MongoURL;
@@ -36,10 +36,10 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-
+// Cron job to ping the server every 14 minutes to avoid cold start
 cron.schedule('*/14 * * * *', () => {
   console.log('Running cron job to avoid cold start');
-  axios.get(`https://dealsdrayclient.onrender.com:${port}`)
+  axios.get(`https://dealsdrayclient.onrender.com/users`)
     .then(() => {
       console.log('Server pinged successfully');
     })
