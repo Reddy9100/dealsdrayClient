@@ -4,17 +4,18 @@ const mongoose = require('mongoose');
 const employeeRoutes = require('./routes/routes');
 const cors = require('cors');
 const multer = require('multer');
-const path = require("path")
+const path = require("path");
+const cron = require('node-cron');
+const axios = require('axios'); 
 const app = express();
+
 const DBurl = process.env.MongoURL;
 const port = process.env.PORT || 5000;
 
 
-
-
 // Middleware
 app.use(cors({
-  origin : "https://dealsdray-t9wt.onrender.com"
+  origin: "https://dealsdray-t9wt.onrender.com"
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -28,9 +29,21 @@ mongoose.connect(DBurl, {
   .catch(err => console.error('MongoDB connection error:', err));
 
 // Routes
-app.use(employeeRoutes); 
+app.use(employeeRoutes);
 
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
+});
+
+
+cron.schedule('*/14 * * * *', () => {
+  console.log('Running cron job to avoid cold start');
+  axios.get(`https://dealsdrayclient.onrender.com:${port}`)
+    .then(() => {
+      console.log('Server pinged successfully');
+    })
+    .catch(err => {
+      console.error('Error pinging server:', err);
+    });
 });
