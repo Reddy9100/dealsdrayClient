@@ -1,18 +1,18 @@
 const Employee = require("../model/employeeModel");
 
-// Controller to create an employee
+
 exports.createEmployee = async (req, res) => {
   try {
-    // Extract fields from req.body and req.file
+    
     const { name, email, mobile, designation, gender, course } = req.body;
     console.log(req.body);
 
-    // Ensure req.file exists
+    
     if (!req.file) {
       return res.status(400).json({ message: "Image file is required." });
     }
 
-    // Construct image URL
+    
     const imagePath = req.file.filename;
     const imageUrl = `${req.protocol}://${req.get(
       "host"
@@ -54,10 +54,10 @@ exports.updateEmployee = async (req, res) => {
     const id = req.params.id;
     console.log(id);
 
-    // Extract fields from the request body
+    
     const { name, email, mobile, designation, gender, course } = req.body;
 
-    // Prepare update object
+    
     const updatedData = {
       name,
       email,
@@ -67,16 +67,16 @@ exports.updateEmployee = async (req, res) => {
       course,
     };
 
-    // Handle file upload if an image is provided
+    
     if (req.file) {
-      // Assuming you're saving the file path in the database
+      
       const imagePath = req.file.filename;
       updatedData.image = `${req.protocol}://${req.get(
         "host"
-      )}/uploads/${imagePath}`; // Adjust as per your storage strategy
+      )}/uploads/${imagePath}`; 
     }
 
-    // Find and update the employee by ID
+    
     const updatedEmployee = await Employee.findByIdAndUpdate(id, updatedData, {
       new: true, 
       runValidators: true, 
@@ -86,7 +86,7 @@ exports.updateEmployee = async (req, res) => {
       return res.status(404).json({ message: "Employee not found" });
     }
 
-    // Send response with updated employee data
+    
     res
       .status(200)
       .json({
