@@ -15,11 +15,11 @@ exports.createEmployee = async (req, res) => {
       return res.status(400).json({ message: "Email is required." });
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
       return res.status(400).json({ message: "Invalid email format." });
     }
-
+    
     if (!mobile) {
       return res.status(400).json({ message: "Mobile number is required." });
     }
