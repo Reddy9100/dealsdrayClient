@@ -7,6 +7,45 @@ exports.createEmployee = async (req, res) => {
     const { name, email, mobile, designation, gender, course } = req.body;
     console.log(req.body);
 
+    if (!name) {
+      return res.status(400).json({ message: "Name is required." });
+    }
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required." });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: "Invalid email format." });
+    }
+
+    if (!mobile) {
+      return res.status(400).json({ message: "Mobile number is required." });
+    }
+
+    if (mobile.length < 10 || mobile.length > 15) {
+      return res.status(400).json({ message: "Invalid mobile number." });
+    }
+
+    if (!designation) {
+      return res.status(400).json({ message: "Designation is required." });
+    }
+
+    if (!gender) {
+      return res.status(400).json({ message: "Gender is required." });
+    }
+
+    if (!course) {
+      return res.status(400).json({ message: "Course is required." });
+    }
+
+    
+    const existingEmployee = await Employee.findOne({ email });
+    if (existingEmployee) {
+      return res.status(400).json({ message: "Employee with this email already exists." });
+    }
+
     
     if (!req.file) {
       return res.status(400).json({ message: "Image file is required." });
