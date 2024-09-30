@@ -51,6 +51,11 @@ exports.createEmployee = async (req, res) => {
       return res.status(400).json({ message: "Image file is required." });
     }
 
+    const allowedMimeTypes = ['image/jpeg', 'image/png'];
+    if (!allowedMimeTypes.includes(req.file.mimetype)) {
+      return res.status(400).json({ message: "Only JPG and PNG formats are allowed." });
+    }
+
     
     const imagePath = req.file.filename;
     const imageUrl = `${req.protocol}://${req.get(
@@ -106,6 +111,10 @@ exports.updateEmployee = async (req, res) => {
       course,
     };
 
+    const allowedMimeTypes = ['image/jpeg', 'image/png'];
+    if (!allowedMimeTypes.includes(req.file.mimetype)) {
+      return res.status(400).json({ message: "Only JPG and PNG formats are allowed." });
+    }
     
     if (req.file) {
       
